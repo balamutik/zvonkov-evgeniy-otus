@@ -1,4 +1,2 @@
 # zvonkov-evgeniy-otus
-123123
-as.,dja,mshdklasd
-adjaskljdklasjdklasjd
+Otus-JS HomeWork by Evgeniy Zvonkov
