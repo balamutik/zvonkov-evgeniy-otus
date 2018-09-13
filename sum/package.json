@@ -1,0 +1,22 @@
+{
+  "name": "sum",
+  "version": "1.0.0",
+  "description": "sum function",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/balamutik/zvonkov-evgeniy-otus.git"
+  },
+  "author": "Evgeniy Zvonkov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/balamutik/zvonkov-evgeniy-otus/issues"
+  },
+  "homepage": "https://github.com/balamutik/zvonkov-evgeniy-otus#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

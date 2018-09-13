@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GetPath demo</title>
+    </head>
+    <body>
+        <div class = "a" id = "b">
+            <button></button>
+            <button onclick="document.querySelectorAll(getPath(this))" class ="Obed" >Press Me</button>
+        </div>
+        <script>
+            function getPath(node){
+                function getElIndex(el) {
+                    for (var i = 0; el = el.previousElementSibling; i++);
+                    return i;
+                }
+                let tempstr, resultstr = "";
+                resultstr = ":nth-child("+(getElIndex(node)+1)+")";
+                while(node.parentNode != null || node.parentNode != undefined){
+                    let tempNode = node.parentNode;
+                    if(tempNode.nodeName!="#document"){
+                        tempstr = tempNode.nodeName;
+                        tempNode.className != '' ? tempstr += '.'+tempNode.className : '';
+                        tempNode.id != '' ? tempstr += '#'+tempNode.id: '';
+                        //console.log("NODENAME "+tempNode.nodeName+" CLASSNAME "+tempNode.className+" ID "+tempNode.id);
+                        resultstr = tempstr + '>'+ resultstr;
+                    }
+                    node = tempNode;
+                    tempstr = "";
+                }
+                //console.log(resultstr);
+                return resultstr;
+            }
+            console.log(document.querySelector("HTML>BODY>:nth-child(1) :nth-child(2)"))
+        </script>
+    </body>
+</html>

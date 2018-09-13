@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <script type="text/javascript" >
+            async function promiceReduce(promiseList, reducer, initialValue){
+                const length = promiseList.length;
+                let tempValue;
+                initialValue != undefined ? tempValue=initialValue : tempValue = 0;
+                let x, tempRes;
+                for(let i=0; i<length; i++){
+                    tempRes = await promiseList[i]();
+                    console.log("Promise returned: "+tempRes)
+                    x = reducer(tempValue, tempRes);
+                    tempValue = x;
+                }
+                alert(x);
+            }
+        
+        const fn1 = () => Promise.resolve(1)
+        
+        
+        const fn2 = () => new Promise(resolve => {
+          setTimeout(()=> resolve(2), 2000)  
+        })
+        const fn3 = () => new Promise(resolve => {
+          setTimeout(()=> resolve(10), 1000)  
+        })
+        
+        const reduce = (memo, value) => memo * value;
+        promiceReduce([fn1, fn3, fn2], reduce, 5);
+        </script>
+    </body>
+</html>

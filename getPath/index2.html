@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GetPath demo</title>
+    </head>
+    <body>
+        <div class = "a" id = "b">
+            <div>
+                <div class="asasd">
+                    <button onclick="console.log(document.querySelectorAll(getPath(this)))">Test 2</button>
+                    <button onclick="console.log(document.querySelectorAll(getPath(this)))" class ="Obed" >Press Me</button>
+                </div>
+            </div>
+        </div>
+        <script>
+
+                
+            function getPath(node){
+                function getElIndex(thisnode) {
+                    var index = 0;
+                    while ( (thisnode = thisnode.previousSibling) ) {
+                        if (thisnode.nodeType != 3 || !/^\s*$/.test(thisnode.data)) {
+                            index++;
+                        }
+                    }
+                    return index+1;
+                }
+                let resultstr = "";
+                resultstr = ":nth-child("+getElIndex(node)+")";
+                while(node.parentNode != null || node.parentNode != undefined){
+                    let tempNode = node.parentNode;
+                    if(tempNode.nodeName!="#document"){
+                        if(tempNode.nodeName == "HTML" || tempNode.nodeName == "BODY"){
+                            resultstr = tempNode.nodeName + " > " + resultstr;
+                        }else{
+                            if(tempNode.parentNode.nodeName == 'BODY'){
+                                resultstr = tempNode.nodeName + " " + resultstr;
+                            }else
+                                resultstr = ":nth-child("+getElIndex(tempNode)+") " + resultstr;
+                        }
+                    }
+                    node = tempNode;
+                }
+                return resultstr;
+            }
+        </script>
+    </body>
+</html>
