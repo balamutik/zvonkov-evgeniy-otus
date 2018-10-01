@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Widget from "./widget";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-//const URL = "https://tproger.ru/translations/react-basic-weather-app/";
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCloud, faKey } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faCloud, faKey);
