@@ -10,9 +10,7 @@ let FAVS = localStorage.getItem('favCityList');
 class App extends Component {
   constructor(p){
     super(p);
-    if(FAVS == null) FAVS = []
-    else
-      FAVS = FAVS.split(";");
+    FAVS == null ? FAVS = [] : FAVS = FAVS.split(";");
     
     this.state = {searchValue: '', cities: FAVS};
     this.addCity = this.addCity.bind(this);
@@ -21,15 +19,12 @@ class App extends Component {
   }
   handleChange(event) {
     this.setState({searchValue: event.target.value});
-    console.log(event.target.value);
   }
   handleSubmit(event){
-    console.log(this.state.searchValue);
     this.addCity(this.state.searchValue);
     event.preventDefault();
   }
   addCity(city){
-    console.log(city);
     if(city!=""){
       FAVS.push(city);
       this.setState({cities: FAVS});
@@ -62,8 +57,8 @@ class App extends Component {
           <div className="container">
             <div className="row">
             { 
-              this.state.cities.map((city, index)=>{
-                return <Widget city={city} />}
+              this.state.cities.map((city)=>{
+                return <Widget key={city} city={city} />}
               )
             }
             </div>

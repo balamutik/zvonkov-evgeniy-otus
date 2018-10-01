@@ -14,7 +14,6 @@ const url = "http://api.openweathermap.org/data/2.5/weather?q=";
 class Widget extends Component {
     constructor(props){
         super(props)
-        console.log("Props: "+props.city+" "+props.key);
         this.state = {
             desc: "",
             temp: "",
@@ -32,28 +31,8 @@ class Widget extends Component {
         this.renderComp = this.renderComp.bind(this);
         
     }
-    checkFav(city){
-        let cityList = localStorage.getItem('favCityList');
-        cityList == null ? cityList = [] : cityList = cityList.split(";");
-        if(cityList.length<1){
-            return;
-        }else if(cityList.indexOf(city)>-1){
-            console.log(city);
-            console.log(cityList);
-            this.setState({isFav: true, btnName: "В избранном"});
-            return;
-        }
-    }
-    addToFav(e){
-        e.preventDefault();
-        let favList = localStorage.getItem('favCityList');
-        favList == null ? favList="" : "";
-        favList+=this.props.city+";";
-        localStorage.setItem('favCityList', favList);
-        this.setState({isFav: true, btnName: "В избранном"});
-    }
-    componentWillMount(){
-        this.checkFav(this.props.city);
+    refreshWeatherData(){
+        if(this.props.city=="") return;
         const composedUrl = url+this.props.city+key+"&lang=ru&units=metric";
         fetch(composedUrl).then(res => res.json()).then(json => {
             if(json.cod === 200){
@@ -71,8 +50,30 @@ class Widget extends Component {
             }
         });
     }
+    checkFav(city){
+        let cityList = localStorage.getItem('favCityList');
+        cityList == null ? cityList = [] : cityList = cityList.split(";");
+        if(cityList.length<1){
+            return;
+        }else if(cityList.indexOf(city)>-1){
+            this.setState({isFav: true, btnName: "В избранном"});
+            return;
+        }
+    }
+    addToFav(e){
+        e.preventDefault();
+        let favList = localStorage.getItem('favCityList');
+        favList == null ? favList="" : "";
+        favList+=this.props.city+";";
+        localStorage.setItem('favCityList', favList);
+        this.setState({isFav: true, btnName: "В избранном"});
+    }
+    componentWillMount(){
+        this.checkFav(this.props.city);
+        this.refreshWeatherData();
+    }
     componentDidMount(){
-       setInterval(()=>this.returnData(), 5000) 
+       setInterval(()=>this.refreshWeatherData(), 5000) 
     }
     
     ReturnData = (() =>{
