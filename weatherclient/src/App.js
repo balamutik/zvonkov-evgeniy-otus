@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import Widget from "./widget";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-//const URL = "https://tproger.ru/translations/react-basic-weather-app/";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCloud, faKey } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faCloud, faKey);
-let FAVS = localStorage.getItem('favCityList').split(";");
+let FAVS = localStorage.getItem('favCityList');
+
 class App extends Component {
   constructor(p){
     super(p);
+    if(FAVS == null) FAVS = []
+    else
+      FAVS = FAVS.split(";");
+    
     this.state = {searchValue: '', cities: FAVS};
     this.addCity = this.addCity.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -17,8 +21,10 @@ class App extends Component {
   }
   handleChange(event) {
     this.setState({searchValue: event.target.value});
+    console.log(event.target.value);
   }
   handleSubmit(event){
+    console.log(this.state.searchValue);
     this.addCity(this.state.searchValue);
     event.preventDefault();
   }
@@ -57,7 +63,7 @@ class App extends Component {
             <div className="row">
             { 
               this.state.cities.map((city, index)=>{
-                return <Widget key={index} city={city} />}
+                return <Widget city={city} />}
               )
             }
             </div>

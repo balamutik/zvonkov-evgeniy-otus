@@ -33,7 +33,8 @@ class Widget extends Component {
         
     }
     checkFav(city){
-        const cityList = localStorage.getItem('favCityList').split(";");
+        let cityList = localStorage.getItem('favCityList');
+        cityList == null ? cityList = [] : cityList = cityList.split(";");
         if(cityList.length<1){
             return;
         }else if(cityList.indexOf(city)>-1){
@@ -46,11 +47,9 @@ class Widget extends Component {
     addToFav(e){
         e.preventDefault();
         let favList = localStorage.getItem('favCityList');
-        console.log("addToFav started. Type of favlist = "+typeof favList)
-        console.log(favList);
+        favList == null ? favList="" : "";
         favList+=this.props.city+";";
         localStorage.setItem('favCityList', favList);
-        console.log(localStorage.getItem('favCityList'));
         this.setState({isFav: true, btnName: "В избранном"});
     }
     componentWillMount(){
@@ -75,8 +74,8 @@ class Widget extends Component {
     componentDidMount(){
        setInterval(()=>this.returnData(), 5000) 
     }
+    
     ReturnData = (() =>{
-                      console.log(this.state.resp);
                       if(this.state.resp===""){
                           return (<div className='sweet-loading'>
                                 <ClipLoader
@@ -88,7 +87,6 @@ class Widget extends Component {
                                 />
                               </div> )
                           }else{
-                              console.log(this.state)
                              return(
                              <div>
                              <p className="card-text">
@@ -104,7 +102,6 @@ class Widget extends Component {
                           }
                       })
     renderComp(){
-        console.log(this.state.resp)
         if(this.state.resp==200){
             return (
                 <div className="col-md-3">
