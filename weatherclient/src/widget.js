@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { css } from 'react-emotion';
-import ClipLoader from 'react-spinners/ClipLoader';
+import Loading from './components/Loading';
+import WeatherInfo from './components/Weatherinfo';
 
-const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: red;
-`;
+const api_key = process.env.REACT_APP_WEATHER_TOKEN;
+const key = "&appid="+api_key;
+const url = "http://api.openweathermap.org/data/2.5/weather?lang=ru&units=metric&q=";
 
-const key = "&appid=3573a34bfd62979cff547ef0d87db78a";
-const url = "http://api.openweathermap.org/data/2.5/weather?q=";
+const WeatherDataWrapper = (props) =>{
+        if(props.resp==="")
+            return (<Loading loading={props.loading} /> )
+        else
+            return(<WeatherInfo data={props.state} addToFav={props.addToFav} />) 
+    }
 
 class Widget extends Component {
     constructor(props){
@@ -25,15 +27,12 @@ class Widget extends Component {
             isFav: false,
             btnName: "Добавить в избранное"
         }
-        this.returnData = this.ReturnData.bind(this);
         this.addToFav = this.addToFav.bind(this);
         this.checkFav = this.checkFav.bind(this);
-        this.renderComp = this.renderComp.bind(this);
-        
     }
     refreshWeatherData(){
-        if(this.props.city=="") return;
-        const composedUrl = url+this.props.city+key+"&lang=ru&units=metric";
+        if(this.props.city==="") return;
+        const composedUrl = url+this.props.city+key;
         fetch(composedUrl).then(res => res.json()).then(json => {
             if(json.cod === 200){
                 this.setState({
@@ -73,57 +72,26 @@ class Widget extends Component {
         this.refreshWeatherData();
     }
     componentDidMount(){
-       setInterval(()=>this.refreshWeatherData(), 5000) 
+       setInterval(()=>this.refreshWeatherData(), 500000) 
     }
     
-    ReturnData = (() =>{
-                      if(this.state.resp===""){
-                          return (<div className='sweet-loading'>
-                                <ClipLoader
-                                  className={override}
-                                  sizeUnit={"px"}
-                                  size={150}
-                                  color={'#123abc'}
-                                  loading={this.state.loading}
-                                />
-                              </div> )
-                          }else{
-                             return(
-                             <div>
-                             <p className="card-text">
-                                 Описание: {this.state.desc}<br/>
-                                 Температура: {this.state.temp} ℃<br/>
-                                 Ветер: {this.state.wind} м/с<br/>
-                                 Давление: {this.state.press} мм. рт. ст.<br/>
-                                 Влажность: {this.state.humidity}%
-                             </p> 
-                             <button className="btn btn-primary" onClick={this.addToFav} disabled={this.state.isFav}>{this.state.btnName}</button>
-                             </div>
-                             ) 
-                          }
-                      })
-    renderComp(){
-        if(this.state.resp==200){
+    render(){
+        if(this.state.resp==="200"){
             return (
                 <div className="col-md-3">
-                    <div className="card">
+                    <div className="card" style={{marginTop:'10px'}}>
                         <div className="card-body">
                           <img className="img-fluid d-block float-right" src={this.state.img} alt={this.state.desc}/>
                           <h5 className="card-title">{this.props.city}</h5>
-                          {
-                            this.returnData()
-                          }
+                            <WeatherDataWrapper resp={this.state.resp} loading={this.state.loading} state={this.state} addToFav={this.addToFav} />
                         </div>
                     </div>
                 </div>
             )
         }else{
             return ""
-        } 
+        }    
     }
-    render(){
-        return this.renderComp()
-    }
-    
 }
+
 export default Widget;

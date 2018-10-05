@@ -10,6 +10,7 @@
     "npm": "^6.4.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-s-alert": "^1.4.1",
     "react-scripts": "1.1.5",
     "react-spinners": "^0.4.5"
   },

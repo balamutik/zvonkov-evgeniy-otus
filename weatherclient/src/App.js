@@ -3,15 +3,18 @@ import Widget from "./widget";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCloud, faKey } from '@fortawesome/free-solid-svg-icons';
+import Alert from 'react-s-alert';
+
 
 library.add(faCloud, faKey);
 let FAVS = localStorage.getItem('favCityList');
+console.log(FAVS);
+const api_key = process.env.REACT_APP_WEATHER_TOKEN;
 
 class App extends Component {
   constructor(p){
     super(p);
     FAVS == null ? FAVS = [] : FAVS = FAVS.split(";");
-    
     this.state = {searchValue: '', cities: FAVS};
     this.addCity = this.addCity.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -21,11 +24,19 @@ class App extends Component {
     this.setState({searchValue: event.target.value});
   }
   handleSubmit(event){
-    this.addCity(this.state.searchValue);
+    const key = "&appid="+api_key;
+    const url = "http://api.openweathermap.org/data/2.5/weather?lang=ru&units=metric&q=";
+    const composedUrl = url+this.state.searchValue+key;
+    fetch(composedUrl).then(res => res.json()).then(json => {
+      if(json.cod !== 200) 
+         Alert.success('Город не найден!', {position: 'bottom'})
+      else
+         this.addCity(this.state.searchValue);
+    })
     event.preventDefault();
   }
   addCity(city){
-    if(city!=""){
+    if(city!==""){
       FAVS.push(city);
       this.setState({cities: FAVS});
     }
@@ -33,6 +44,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Alert stack={{limit: 3}} />
         <nav className="navbar navbar-dark bg-primary">
           <div className="container d-flex justify-content-center"> <a className="navbar-brand">
              <FontAwesomeIcon icon="cloud"/>
@@ -58,7 +70,10 @@ class App extends Component {
             <div className="row">
             { 
               this.state.cities.map((city)=>{
-                return <Widget key={city} city={city} />}
+                  if(city !== "") return <Widget key={city} city={city} />
+                  else 
+                    return "";
+                }
               )
             }
             </div>
