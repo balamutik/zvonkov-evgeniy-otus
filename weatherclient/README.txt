@@ -1,0 +1,1 @@
+Create .env file. Add to this file line REACT_APP_WEATHER_TOKEN=<token from OpenWeatherMap>

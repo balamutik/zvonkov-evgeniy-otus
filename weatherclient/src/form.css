@@ -1,0 +1,10 @@
+.center {
+    text-align:center;
+}
+
+.center form {
+    display:inline-block;
+}
+form {
+    background:#3399ff;
+}
